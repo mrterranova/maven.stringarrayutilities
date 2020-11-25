@@ -61,11 +61,12 @@ public class StringArrayUtils {
      * @return an array with identical contents in reverse order
      */ // TODO
     public static String[] reverse(String[] array) {
+        int counter = 0;
         String[] reverse = new String[array.length];
-        for(int i=0; i < array.length; i++){
-            reverse[i] = array[Math.abs(i-(array.length-1))];
+        for (int i = array.length-1; i >=0; i--) {
+            reverse[counter] = array[i];
+            counter++;
         }
-        System.out.print(reverse);
         return reverse;
 
     }
@@ -75,7 +76,14 @@ public class StringArrayUtils {
      * @return true if the order of the array is the same backwards and forwards
      */ // TODO
     public static Boolean isPalindromic(String[] array) {
-        if ( array.equals(reverse(array))) return true;
+        String reverseStr = "", str ="";
+        String[] revArr = reverse(array);
+        for (int i = 0; i < array.length; i++) {
+            str += array[i];
+            reverseStr += revArr[i];
+        }
+
+        if (str.equals(reverseStr)) return true;
         return false;
     }
 
@@ -84,20 +92,23 @@ public class StringArrayUtils {
      * @return true if each letter in the alphabet has been used in the array
      */ // TODO
     public static Boolean isPangramic(String[] array) {
-        String[] alpha = new String[]{"a","b","c","d","e","f","g","h","i", "j", "k", "l","m","n","o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
-        boolean[] allLetters = new boolean[array.length];
-        if (array.length < 26) return false;
-        for (int i=0; i < alpha.length; i++) {
-            if (alpha[i] == array[i]){
-                allLetters[i] = true;
-            } else {
-                allLetters[i] = false;
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        String concatArray = "";
+        for(int i=0; i< array.length; i++){
+            concatArray +=array[i];
+        }
+
+        int count = 0;
+        for(int i=0; i < concatArray.length(); i++){
+            for(int j=0; j < alphabet.length(); j++) {
+                if (concatArray.charAt(i) == alphabet.charAt(j)) {
+                    count++;
+                }
             }
         }
-        for(int j=0; j < allLetters.length; j++){
-            if(allLetters[j]) return false;
-        }
-        return true;
+        System.out.print(count);
+        if (count>=26) return true;
+        return false;
     }
 
     /**
@@ -119,17 +130,15 @@ public class StringArrayUtils {
      * @return array with identical contents excluding values of `value`
      */ // TODO
     public static String[] removeValue(String[] array, String valueToRemove) {
+        String[] vals = new String[array.length];
         int count = 0;
-//        String[] newStr = new String[array.length];
-        List<String> newList = new ArrayList<>();
-        for(int i=0; i< array.length; i++) {
-            if(valueToRemove == array[i]){
-                continue;
-            } else {
-                newList.add(array[i]);
+        for(int i=0; i< array.length; i++){
+            if(array[i] != valueToRemove){
+                vals[count] = array[i];
+                count++;
             }
         }
-        return (String[]) newList.toArray();
+        return Arrays.copyOf(vals, count);
     }
 
     /**
@@ -137,7 +146,13 @@ public class StringArrayUtils {
      * @return array of Strings with consecutive duplicates removes
      */ // TODO
     public static String[] removeConsecutiveDuplicates(String[] array) {
-        return null;
+        String newStr = array[0];
+        for(int i = 1; i < array.length;i++){
+            if(array[i] !=array[i-1] ){
+                newStr += " " +array[i];
+            }
+        }
+        return newStr.split(" ");
     }
 
     /**
@@ -145,6 +160,25 @@ public class StringArrayUtils {
      * @return array of Strings with each consecutive duplicate occurrence concatenated as a single string in an array of Strings
      */ // TODO
     public static String[] packConsecutiveDuplicates(String[] array) {
-        return null;
+        String str = array[0];
+        List<String> list = new ArrayList<>();
+
+        for (int i = 1; i < array.length; i++) {
+            if(array[i] == array[i-1]){
+                str += array[i];
+            } else {
+                list.add(str);
+                str = "";
+                str += array[i];
+            }
+        }
+        list.add(str);
+
+        String[] newArr = new String[list.size()];
+        for (int i = 0; i < list.size() ; i++) {
+            newArr[i] = list.get(i);
+            System.out.print(list.get(i)+ " ");
+        }
+        return newArr;
     }
 }
